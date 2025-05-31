@@ -1,22 +1,18 @@
 ﻿using DbUp;
 using DbUp.ScriptProviders;
-using DbUp.Engine;
-using DbUp.Engine.Output;
-using System;
-using System.Linq;
-using System.IO;
-
 class Program
-             
+
 {
     static int Main(string[] args)
     {
-      var databases = new[]
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+        var databases = new[]
         {
-            new { Name = "testDB", ConnectionString = "", ScriptPath = "DBScripts" },
+            new { Name = "testDB", ConnectionString = "Data Source=.;Initial Catalog=testdb1;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true", ScriptPath =  Path.Combine(baseDirectory, "Scripts") },
         };
 
-        var logsFolder = "AllDBLogs";
+        var logsFolder = Path.Combine(baseDirectory, "AllDBLogs");
         Directory.CreateDirectory(logsFolder);
 
         var logFile = Path.Combine(logsFolder, $"UpgradeLog_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt");
@@ -76,6 +72,6 @@ class Program
 
         Log("All databases upgraded successfully.", ConsoleColor.Green);
         return 0;
-    
+
     }
 }
